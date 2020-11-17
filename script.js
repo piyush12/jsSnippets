@@ -1,5 +1,5 @@
 // Fibonacci
-export function fibonacci(num) {
+function fibonacci(num) {
   let n1 = 0,
     n2 = 1,
     nextTerm;
@@ -12,7 +12,7 @@ export function fibonacci(num) {
 }
 
 // Recursive Fibonnaci
-export function recursiveFibonacci(num) {
+function recursiveFibonacci(num) {
   if (num <= 1) {
     return 1;
   }
@@ -20,7 +20,7 @@ export function recursiveFibonacci(num) {
 }
 
 // Factorial
-export function factorial(num) {
+function factorial(num) {
   let temp = 1;
   for (let i = 1; i <= num; i++) {
     temp *= i;
@@ -29,15 +29,19 @@ export function factorial(num) {
 }
 
 // Recursive Factorial
-export function recursiveFactorial(num) {
+function recursiveFactorial(num) {
   if (num === 0) {
     return 1;
   }
   return num * recursiveFactorial(num - 1);
 }
 
+// Memoized Factorial
+const memoizedFactorial = memo(recursiveFactorial);
+const memoizedFactorial8 = memoizedFactorial(8);
+
 // Memoization Function
-export function memo(fun) {
+function memo(fun) {
   let cache = {};
   return (...args) => {
     const key = JSON.stringify(args);
