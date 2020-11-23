@@ -51,3 +51,17 @@ function memo(fun) {
     return (cache[key] = fun.apply(null, args));
   };
 }
+
+// get form inputs data
+
+function captureFormInputs(event) {
+  const elemArray = [...event.target.elements];
+  const data = elemArray.reduce((acc, elem) => {
+    if (elem.name && elem.id) {
+      acc[elem.name] = elem.value;
+    }
+    return acc;
+  }, {});
+
+  return data;
+}
