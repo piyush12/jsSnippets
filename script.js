@@ -52,7 +52,7 @@ function memo(fun) {
   };
 }
 
-// get form inputs data
+// get form inputs data for uncontrolled form inputs react :)
 
 function captureFormInputs(event) {
   const elemArray = [...event.target.elements];
