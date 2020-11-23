@@ -65,3 +65,11 @@ function captureFormInputs(event) {
 
   return data;
 }
+
+// ============== or ========
+
+function captureFormInputsNew(event) {
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData);
+  return data;
+}
