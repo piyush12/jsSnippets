@@ -52,6 +52,28 @@ function memo(fun) {
   };
 }
 
+function sum(a, b) {
+  return a + b;
+}
+
+const fn = memoized(sum);
+fn(2, 4);
+fn(2, 4);
+
+function memoized(callback) {
+  let cache = {};
+  return function (...args) {
+    const key = JSON.stringify(args);
+
+    if (key in cache) {
+      return cache[key];
+    }
+    const result = callback(args);
+    cache[key] = result;
+    return result;
+  };
+}
+
 // get form inputs data for uncontrolled form inputs react :)
 
 function captureFormInputs(event) {
@@ -72,4 +94,41 @@ function captureFormInputsNew(event) {
   const formData = new FormData(event.target);
   const data = Object.fromEntries(formData);
   return data;
+}
+
+/// once function
+
+function once() {
+  var clicked = false;
+
+  return function () {
+    if (!clicked) {
+      clicked = true;
+      // do anything
+    }
+    return clicked;
+  };
+}
+
+//// debounce function
+
+function debounce(fn, delay) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    let context = this;
+    timer = setTimeout(() => {
+      fn.apply(context, args);
+    }, delay);
+  };
+}
+
+////////// misc
+// remove elements from end of array and print the removed array
+let array = [1, 2, 3, 4, 5];
+function removeArrayFromEnd(array, num) {
+  const reverseArray = array.reverse();
+  const removedArray = reverseArray.slice(0, num).reverse();
+  const newArray = reverseArray.reverse();
+  return removedArray;
 }
