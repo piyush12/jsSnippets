@@ -123,6 +123,23 @@ function debounce(fn, delay) {
   };
 }
 
+//// throttle
+
+function throttle(fn, delay) {
+  let timer;
+
+  return function () {
+    let context = this;
+    if (!timer) {
+      fn.apply(context, arguments);
+      timer = true;
+      setTimeout(() => {
+        timer = false;
+      }, delay);
+    }
+  };
+}
+
 ////////// misc
 // remove elements from end of array and print the removed array
 let array = [1, 2, 3, 4, 5];
@@ -131,4 +148,69 @@ function removeArrayFromEnd(array, num) {
   const removedArray = reverseArray.slice(0, num).reverse();
   const newArray = reverseArray.reverse();
   return removedArray;
+}
+
+//  sum of a(1)(2)(3)(4)
+const add = (a) => (b) => (b ? add(a + b) : a);
+//console.log(add(1)(2)(3)(4)());
+
+//// implement bind
+
+const person = {
+  name: "piyush",
+};
+
+function setName(lastName, state, profile) {
+  return `my name is ${this.name} ${lastName}, ${state}, ${profile}`;
+}
+
+Function.prototype.customBind = function (...context) {
+  if (typeof this !== "function") {
+    throw new Error("Not a function");
+  }
+  let fn = this;
+  return function () {
+    return fn.apply(context[0], [...context.slice(1), ...arguments]);
+  };
+};
+const myName = setName.customBind(person, "chatterjee", "live in kanpur");
+//console.log(myName("Developer"));
+
+/// curried
+
+function curry(fn) {
+  return function currify(...args) {
+    if (args.length >= fn.length) {
+      console.log(args);
+      return fn.apply(this, args);
+    } else {
+      return currify.bind(this, ...args);
+    }
+  };
+}
+
+///////// Prototype and prototypal inheritance
+
+function Animal(name) {
+  this.name = name;
+}
+Animal.prototype.eat = function (food) {
+  return `${this.name} eat ${food}`;
+};
+Animal.prototype.sleep = function (amount) {
+  console.log(`${this.name} sleep ${amount}hrs`);
+};
+
+function Programmer(name, lang) {
+  Animal.call(this, name);
+  this.language = lang;
+}
+Programmer.prototype = Object.create(Animal.prototype);
+Programmer.prototype.constructor = Programmer;
+const piyush = new Programmer("piyush", "Javascript");
+
+function setTimeoutPromise(delay) {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, delay);
+  });
 }
