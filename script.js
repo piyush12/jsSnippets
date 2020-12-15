@@ -178,39 +178,99 @@ const myName = setName.customBind(person, "chatterjee", "live in kanpur");
 
 /// curried
 
-function curry(fn) {
-  return function currify(...args) {
-    if (args.length >= fn.length) {
-      console.log(args);
-      return fn.apply(this, args);
+function currying(func) {
+  return function curryFunc(...args) {
+    if (args.length === func.length) {
+      return func(...args);
     } else {
-      return currify.bind(this, ...args);
+      return curryFunc.bind(this, ...args);
     }
   };
 }
 
-///////// Prototype and prototypal inheritance
-
-function Animal(name) {
-  this.name = name;
+function multiply(a, b, c) {
+  return a * b * c;
 }
-Animal.prototype.eat = function (food) {
-  return `${this.name} eat ${food}`;
+let curried = currying(multiply);
+//console.log(curried(2)(3)(4)); //24
+//console.log(curried(5)(6, 7)); //24
+
+function giveMeFunctions() {
+  var functions = [];
+  for (var i = 0; i < 3; i++) {
+    functions[i] = (function (arg) {
+      return function () {
+        return arg * arg;
+      };
+    })(i);
+  }
+  return functions;
+}
+
+/// Greatest common divisor
+
+var gcd = function (a, b) {
+  console.log(a);
+  if (!b) {
+    return a;
+  }
+
+  return gcd(b, a % b);
 };
-Animal.prototype.sleep = function (amount) {
-  console.log(`${this.name} sleep ${amount}hrs`);
-};
 
-function Programmer(name, lang) {
-  Animal.call(this, name);
-  this.language = lang;
-}
-Programmer.prototype = Object.create(Animal.prototype);
-Programmer.prototype.constructor = Programmer;
-const piyush = new Programmer("piyush", "Javascript");
+/// parenthesis checker
+balancedParentheses("{[]()}");
+balancedParentheses("{[(])}");
+function balancedParentheses(str) {
+  let stack = [];
+  let map = {
+    "(": ")",
+    "[": "]",
+    "{": "}",
+  };
 
-function setTimeoutPromise(delay) {
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve, delay);
-  });
+  for (let i = 0; i < str.length; i++) {
+    // If character is an opening brace add it to a stack
+    if (str[i] === "(" || str[i] === "{" || str[i] === "[") {
+      stack.push(str[i]);
+    }
+    //if closing brace, pop from stack
+    else {
+      let lastEle = stack.pop();
+      //Return false if the element popped doesn’t match the corresponding closing brace in the map
+
+      if (str[i] !== map[lastEle]) {
+        return false;
+      }
+    }
+  }
+  //if stack not empty at end, return false
+  if (stack.length !== 0) {
+    return false;
+  }
+
+  return true;
 }
+
+//// flattern array
+
+function flattenArray(arr, result) {
+  // using es6 flat method
+  // return arr.flat(Infinity);
+  for (let i = 0; i < arr.length; i++) {
+    if (Array.isArray(arr[i])) {
+      flattenArray(arr[i], result);
+    } else {
+      result.push(arr[i]);
+    }
+  }
+  return result;
+}
+//console.log(flattenArray([1, [2], [3, [[4]]]], []));
+
+//// shuffle array
+var my_list = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+my_list.sort(function () {
+  return Math.random() - 0.5;
+});
+// [4, 8, 2, 9, 1, 3, 6, 5, 7]
